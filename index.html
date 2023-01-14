@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.148.0/three.js" integrity="sha512-QCgI2hwwzXcsan5cX/GfunvcXL5J2inb1k/k0foYk67GvF0u3IgMHa7YU+RDBKInlYqy7uHOhBhMKHOA6uEkcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<body>
+	</body>
+    <script>
+        // Sphere drawing example for Georgina.
+
+        // Create the renderer which will draw the sphere.
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        // Add a DOM object to the page to draw.
+        document.body.appendChild( renderer.domElement );
+
+        // Make a camera to look at the sphere.
+        const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+        camera.position.set( 0, 0, 100 );
+        camera.lookAt( 0, 0, 0 );
+
+        // Make a scene to hold all the objects.
+        const scene = new THREE.Scene();
+
+        // Make a light and add it to the scene.
+        const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        scene.add( directionalLight );
+
+        // Make a sphere and add it to the scene.
+        const geometry = new THREE.SphereGeometry( 5, 16, 8 );
+        const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+        const sphere = new THREE.Mesh( geometry, material );
+        scene.add( sphere );
+
+        // The parameters for animating the sphere.
+        let angle = 0;
+        let radius = 20;
+        let speed = 0.01;
+
+        // This function gets called on every frame.
+        function animate() {
+            requestAnimationFrame( animate );
+
+            // Set the position of the sphere before drawing it.
+            sphere.position.x = Math.cos(angle) * radius;
+            sphere.position.y = Math.sin(angle) * radius;
+            renderer.render( scene, camera );
+
+            // Update the angle.
+            angle += speed;
+        }
+        animate();
+
+    </script>
+</html>
