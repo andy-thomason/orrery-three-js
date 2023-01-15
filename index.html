@@ -28,31 +28,44 @@
         const scene = new THREE.Scene();
 
         // Make a light and add it to the scene.
-        const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.25 );
+        directionalLight.position.copy(new THREE.Vector3(1, 0, 0));
         scene.add( directionalLight );
 
-        // Make a sphere and add it to the scene.
-        const geometry = new THREE.SphereGeometry( 5, 16, 8 );
-        const material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-        const sphere = new THREE.Mesh( geometry, material );
-        scene.add( sphere );
+        // Define details about our planets.
+        let planets = [
+            { angle: 0, radius: 0, size: 5, speed: 0, color: 0xffffff },
+            { angle: 0, radius: 15, size: 1, speed: 0.01, color: 0xff0000 },
+            { angle: 0, radius: 25, size: 2, speed: 0.005, color: 0x00ff00 },
+        ];
 
-        // The parameters for animating the sphere.
-        let angle = 0;
-        let radius = 20;
-        let speed = 0.01;
+        // Create a sphere object for each planet.
+        for (i in planets) {
+            const p = planets[i];
+            // Make a sphere and add it to the scene.
+            const geometry = new THREE.SphereGeometry( p.size, 16, 8 );
+            const material = new THREE.MeshBasicMaterial( { color: p.color } );
+            const sphere = new THREE.Mesh( geometry, material );
+            p.sphere = sphere;
+            scene.add( sphere );
+        }
 
         // This function gets called on every frame.
         function animate() {
             requestAnimationFrame( animate );
 
-            // Set the position of the sphere before drawing it.
-            sphere.position.x = Math.cos(angle) * radius;
-            sphere.position.y = Math.sin(angle) * radius;
-            renderer.render( scene, camera );
+            // Update the positions of the planets.
+            for (i in planets) {
+                const p = planets[i];
+                // Set the position of the sphere before drawing it.
+                p.sphere.position.x = Math.cos(p.angle) * p.radius;
+                p.sphere.position.y = Math.sin(p.angle) * p.radius;
 
-            // Update the angle.
-            angle += speed;
+                // Update the angle.
+                p.angle += p.speed;
+            }
+
+            renderer.render( scene, camera );
         }
         animate();
 
