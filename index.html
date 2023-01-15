@@ -21,7 +21,7 @@
 
         // Make a camera to look at the sphere.
         const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
-        camera.position.set( 0, 0, 100 );
+        camera.position.set( 0, 100, 0 );
         camera.lookAt( 0, 0, 0 );
 
         // Make a scene to hold all the objects.
@@ -39,15 +39,18 @@
             { angle: 0, radius: 25, size: 2, speed: 0.005, color: 0x00ff00 },
         ];
 
-        // Create a sphere object for each planet.
+        // Create a sphere object for    each planet.
         for (i in planets) {
             const p = planets[i];
+
             // Make a sphere and add it to the scene.
             const geometry = new THREE.SphereGeometry( p.size, 16, 8 );
             const material = new THREE.MeshBasicMaterial( { color: p.color } );
             const sphere = new THREE.Mesh( geometry, material );
-            p.sphere = sphere;
             scene.add( sphere );
+
+            // Remember the sphere mesh.
+            p.sphere = sphere;
         }
 
         // This function gets called on every frame.
@@ -57,6 +60,9 @@
             // Update the positions of the planets.
             for (i in planets) {
                 const p = planets[i];
+                // We can print things on the console (crl-shift-I)
+                // console.log(p);
+
                 // Set the position of the sphere before drawing it.
                 p.sphere.position.x = Math.cos(p.angle) * p.radius;
                 p.sphere.position.y = Math.sin(p.angle) * p.radius;
@@ -65,8 +71,11 @@
                 p.angle += p.speed;
             }
 
+            // This draws a new frame.
             renderer.render( scene, camera );
         }
+
+        // Call animate for the first time.
         animate();
 
     </script>
